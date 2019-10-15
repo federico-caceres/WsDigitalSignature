@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://com" xmlns:intf="http://com" xmlns:tns1="http://text.itextpdf.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://text.itextpdf.com"/>
+   <element name="func">
+    <complexType>
+     <sequence>
+      <element name="tipo_firma" type="xsd:int"/>
+      <element name="firmante" type="xsd:int"/>
+      <element name="estado_recibo" type="xsd:int"/>
+      <element name="id_recibo" type="xsd:string"/>
+      <element name="pass" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="funcResponse">
+    <complexType>
+     <sequence>
+      <element name="funcReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="fault" type="tns1:DocumentException"/>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://text.itextpdf.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <complexType name="DocumentException">
+    <sequence/>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="funcRequest">
+
+      <wsdl:part element="impl:func" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="DocumentException">
+
+      <wsdl:part element="impl:fault" name="fault">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="funcResponse">
+
+      <wsdl:part element="impl:funcResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="ServicioFirma">
+
+      <wsdl:operation name="func">
+
+         <wsdl:input message="impl:funcRequest" name="funcRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:funcResponse" name="funcResponse">
+
+       </wsdl:output>
+
+         <wsdl:fault message="impl:DocumentException" name="DocumentException">
+
+       </wsdl:fault>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="ServicioFirmaSoapBinding" type="impl:ServicioFirma">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="func">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="funcRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="funcResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="DocumentException">
+
+            <wsdlsoap:fault name="DocumentException" use="literal"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="ServicioFirmaService">
+
+      <wsdl:port binding="impl:ServicioFirmaSoapBinding" name="ServicioFirma">
+
+         <wsdlsoap:address location="http://localhost:8080/WsDigitalSignature/services/ServicioFirma"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
