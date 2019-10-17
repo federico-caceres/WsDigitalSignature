@@ -34,6 +34,7 @@ public class LogicaFirma
 	
     public static void FirmaDigital(int firmante, int estado_recibo, String id_recibo, String pass) throws IOException, DocumentException, KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, GeneralSecurityException 
     {
+    	//variables para guardar la ubicación del directorio de origen del recibo a firmar y la ubicación del directorio destino donde colocar el recibo firmado
     	String origenrecibo;
     	String destinorecibo;
     	
@@ -41,7 +42,7 @@ public class LogicaFirma
         String ubicacionp12 = "C:/eclipse/keystore/";
         File fContenedorp12 = new File(ubicacionp12,firmante+".p12");
         
-        //Pdf a firmar
+        //Si estado recibo es igual 1 la firma lo esta realizando la empresa
         if (estado_recibo == 1)
         {
         	//variable var guarda posición del caracter "-" para utilizar funcion subtring para identificar año y mes del recibo
@@ -52,7 +53,7 @@ public class LogicaFirma
         	destinorecibo = "C:/xampp/htdocs/sgfrs/public/recibos/firmados_empresa/20"+id_recibo.substring(var+2,var+4)+"/"+id_recibo.substring(var,var+2)+"/"+id_recibo+".pdf";
 
         }
-        else
+        else //Si estado recibo es diferente de 1 la firma lo esta realizando la empresa
         {     
             //variable var guarda posición del caracter "-" para utilizar funcion subtring para identificar año y mes del recibo
         	int var = id_recibo.indexOf("-")+1;        	
@@ -91,14 +92,13 @@ public class LogicaFirma
         
         //Se indican alguno detalles de la forma en que se firmara
         PdfSignatureAppearance appearance = stamper.getSignatureAppearance();
-        appearance.setReason("It's personal.");
-        appearance.setLocation("Foobar");
-        
-        if (firmante == 1000000)
+        if (estado_recibo == 1)//Si estado recibo es igual a 1 el firmante es la empresa
         {
+        	appearance.setReason("Firma de parte de la empresa por la aceptación del contenido del recibo de salario del empleado");
         	appearance.setVisibleSignature(new Rectangle(50,260,200,300),1,null);
-        }else
+        }else if (estado_recibo == 2)//Si estado recibo es igual a 2 el firmante es el empleado
         {
+        	appearance.setReason("Firma de parte de la empleado por la aceptación del contenido de su recibo de salario entregado por la empresa");
         	appearance.setVisibleSignature(new Rectangle(600,260,750,300),1,null);
         }
         
