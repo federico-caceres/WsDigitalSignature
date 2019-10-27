@@ -34,7 +34,12 @@ public class ServicioFirma
 				System.out.println("Se firmo el siguiente recibo: "+id_recibo);
 			}catch (IOException | DocumentException | GeneralSecurityException e1)
 			{
-				e1.printStackTrace();			
+				System.out.println("getMessage: "+e1.getMessage());
+				System.out.println("getCause: "+e1.getCause());
+				System.out.println("getLocalizedMessage: "+e1.getLocalizedMessage());
+				e1.printStackTrace();
+				ControlError.ControlKeyStore(estado_recibo, id_recibo);
+				return e1.getMessage();
 			}	
 			return "Se realizo firma unitaria por el usuario con CI: "+firmante+" ID Recibo: "+id_recibo;
 		}
