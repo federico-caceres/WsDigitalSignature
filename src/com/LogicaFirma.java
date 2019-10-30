@@ -62,7 +62,7 @@ public class LogicaFirma
             //ubicacion destino del recibo firmado
         	destinorecibo = "C:/xampp/htdocs/sgfrs/public/recibos/firmados_empresa_empleados/20"+id_recibo.substring(var+2,var+4)+"/"+id_recibo.substring(var,var+2)+"/"+id_recibo+".pdf";
 
-        }   
+        }
         
         //Se agrega bouncyCastle al provider de java, si no se realiza, arroja un error
         Provider p = new BouncyCastleProvider();

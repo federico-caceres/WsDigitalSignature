@@ -4,31 +4,49 @@ import java.io.File;
 
 public class ControlError 
 {
-	public static void ControlKeyStore(int estado_recibo, String id_recibo)
+	public static String ControlKeyStore(int firmante)
 	{
-		File dir;
-		if(estado_recibo == 1)
-        {
-        	int var = id_recibo.indexOf("-")+1;        	
-        	dir = new File("C:/xampp/htdocs/sgfrs/public/recibos/pendientes/20"+id_recibo.substring(var+2,var+4)+"/"+id_recibo.substring(var,var+2)+"/");
-        }else
-        {
-        	int var = id_recibo.indexOf("-")+1;        	
-        	dir = new File("C:/xampp/htdocs/sgfrs/public/recibos/firmados_empresa/20"+id_recibo.substring(var+2,var+4)+"/"+id_recibo.substring(var,var+2)+"/");
-            
-        }
-		//File dir = new File("C:/xampp/htdocs/sgfrs/public/recibos/pendientes/2019/01");
-		String[] ficheros = dir.list();
-		
-		if (ficheros == null)
+		File archivo = new File("C:/eclipse/KeyStore/"+firmante+".p12");
+		String resultado;
+		if (!archivo.exists()) 
 		{
-			System.out.println("El directorio no existe");
+			resultado ="Error: No se encontro la firma digital del usuario en el servidor, contacte con el Administrador del Sistema";
+		    System.out.println("No existe el archivo .p12 en el keystore");
 		}else
 		{
-			for (int x=0; x<ficheros.length;x++)
-			{
-				System.out.println(ficheros[x]);
-			}
+			System.out.println("Archivo .p12 correcto \n");
+			resultado ="ok";
 		}
+		return resultado;
+	}
+	public static String ControlEstadoRecibo(int estado_recibo)
+	{
+		String resultado;
+		if(estado_recibo != 1 && estado_recibo != 2)
+		{
+			System.out.println("Error: El parametro de estado de recibo es diferente de 1 (firma empresa) o 2 (firma empleado)");
+			resultado= "Error: El parametro de estado de recibo es diferente de 1 (firma empresa) o 2 (firma empleado)";
+		}
+		else
+		{
+			System.out.println("Estado recibo correcto \n");
+			resultado ="ok";
+		}
+		return resultado;
+	}
+	public static String ControlTipoFirma(int tipo_firma)
+	{
+		String resultado;
+		if(tipo_firma != 1 && tipo_firma != 2)
+		{
+			System.out.println("\n Error: El parametro de tipo firma es diferente de 1 (firma unitaria) o 2 (firma masiva)");
+			resultado= "Error: El parametro de tipo firma es diferente de 1 (firma unitaria) o 2 (firma masiva)";
+		}
+		else
+		{
+			System.out.println("\nTipo de firma correcto \n");
+			resultado ="ok";
+		}
+		return resultado;
 	}
 }
