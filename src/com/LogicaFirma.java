@@ -34,10 +34,10 @@ public class LogicaFirma
 	
     public static void FirmaDigital(int firmante, int estado_recibo, String id_recibo, String pass) throws IOException, DocumentException, KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, GeneralSecurityException 
     {
-    	//variables para guardar la ubicación del directorio de origen del recibo a firmar y la ubicación del directorio destino donde colocar el recibo firmado
-    	String origenrecibo;
-    	String destinorecibo;
-    	
+    	//variables para guardar la ubicación del directorio de origen y destino del recibo firmado
+    	String origenrecibo = "";
+    	String destinorecibo = "";
+
     	//certificado en formato p12 o pfx (debe contener llave privada, publica y certificado)
         String ubicacionp12 = "C:/eclipse/keystore/";
         File fContenedorp12 = new File(ubicacionp12,firmante+".p12");
@@ -51,7 +51,6 @@ public class LogicaFirma
         	origenrecibo = "C:/xampp/htdocs/sgfrs/public/recibos/pendientes/20"+id_recibo.substring(var+2,var+4)+"/"+id_recibo.substring(var,var+2)+"/"+id_recibo+".pdf";
             //ubicacion destino del recibo firmado
         	destinorecibo = "C:/xampp/htdocs/sgfrs/public/recibos/firmados_empresa/20"+id_recibo.substring(var+2,var+4)+"/"+id_recibo.substring(var,var+2)+"/"+id_recibo+".pdf";
-
         }
         else //Si estado recibo es diferente de 1 la firma lo esta realizando la empresa
         {     
@@ -61,7 +60,6 @@ public class LogicaFirma
         	origenrecibo = "C:/xampp/htdocs/sgfrs/public/recibos/firmados_empresa/20"+id_recibo.substring(var+2,var+4)+"/"+id_recibo.substring(var,var+2)+"/"+id_recibo+".pdf";
             //ubicacion destino del recibo firmado
         	destinorecibo = "C:/xampp/htdocs/sgfrs/public/recibos/firmados_empresa_empleados/20"+id_recibo.substring(var+2,var+4)+"/"+id_recibo.substring(var,var+2)+"/"+id_recibo+".pdf";
-
         }
         
         //Se agrega bouncyCastle al provider de java, si no se realiza, arroja un error
@@ -111,6 +109,10 @@ public class LogicaFirma
         
         //Se cierran las instancias para liberar espacio
         stamper.close();
-        reader.close();          
+        reader.close();
+        
+        //creación objeto recibo, este objeto se utilizara para eliminar el recibo origen
+        File recibo = new File(origenrecibo);
+        recibo.delete();
     }
 }
