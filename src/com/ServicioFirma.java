@@ -53,7 +53,7 @@ public class ServicioFirma
 			{
 				System.out.println("\n getMessage: "+e1.getMessage());
 				System.out.println("\n getCause: "+e1.getCause());
-				//e1.printStackTrace();	
+				e1.printStackTrace();	
 				String MensajError =e1.getMessage().toString();
 				if(MensajError == "keystore password was incorrect") //Se verifica si hay error en la contraseña de firma
 				{

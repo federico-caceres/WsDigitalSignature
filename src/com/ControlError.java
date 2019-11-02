@@ -6,7 +6,7 @@ public class ControlError
 {
 	public static String ControlKeyStore(int firmante)
 	{
-		File archivo = new File("C:/eclipse/KeyStore/"+firmante+".p12");
+		File archivo = new File("C:/xampp/htdocs/sgfrs/KeyStore/"+firmante+".p12");
 		String resultado;
 		if (!archivo.exists()) 
 		{
