@@ -39,13 +39,12 @@ public class LogicaFirma
     	String destinorecibo = "";
 
     	//certificado en formato p12 o pfx (debe contener llave privada, publica y certificado)
-        String ubicacionp12 = "C:/eclipse/keystore/";
+        String ubicacionp12 = "C:/xampp/htdocs/sgfrs/KeyStore/";
         File fContenedorp12 = new File(ubicacionp12,firmante+".p12");
         
         //Si estado recibo es igual 1 la firma lo esta realizando la empresa
         if (estado_recibo == 1)
         {
-        	//variable var guarda posición del caracter "-" para utilizar funcion subtring para identificar año y mes del recibo
         	int var = id_recibo.indexOf("-")+1;        	
         	//ubicacion del recibo que se va firmar
         	origenrecibo = "C:/xampp/htdocs/sgfrs/public/recibos/pendientes/20"+id_recibo.substring(var+2,var+4)+"/"+id_recibo.substring(var,var+2)+"/"+id_recibo+".pdf";
