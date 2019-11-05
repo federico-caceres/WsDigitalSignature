@@ -14,6 +14,11 @@ import java.security.Security;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509CRL;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -23,11 +28,15 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.security.BouncyCastleDigest;
+import com.itextpdf.text.pdf.security.CertificateUtil;
+import com.itextpdf.text.pdf.security.CrlClient;
+import com.itextpdf.text.pdf.security.CrlClientOnline;
 import com.itextpdf.text.pdf.security.ExternalDigest;
 import com.itextpdf.text.pdf.security.ExternalSignature;
 import com.itextpdf.text.pdf.security.MakeSignature;
 import com.itextpdf.text.pdf.security.PrivateKeySignature;
 import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
+import java.util.Date;
 
 public class LogicaFirma 
 {
@@ -81,11 +90,48 @@ public class LogicaFirma
         //Se obtiene la cadena de certificados en base al nombre del certificado
         Certificate[] chain = ks.getCertificateChain(alias);
         
+        //Impresion de datos del certificado del firmante
+        for (int i = 0; i < chain.length; i++) 
+        {
+    	X509Certificate cert = (X509Certificate)chain[i];
+    	System.out.println(String.format("[%s] %s", i, cert.getSubjectDN()));
+    	System.out.println(CertificateUtil.getCRLURL(cert));
+    	}
+        
+        //Se obtiene las CRL del certificado raiz e intermedio y se agrega para agregar al documento firmado
+        List<CrlClient> crlList = new ArrayList<CrlClient>();
+        crlList.add(new CrlClientOnline(chain));
+        
+        //Control verificacion de revocacion del ceritificado
+        CertificateFactory cf = CertificateFactory.getInstance("X.509");
+        X509CRL crl = (X509CRL)cf.generateCRL(new FileInputStream("C:/xampp/htdocs/sgfrs/public/crl/vitsa.crl"));
+        if(crl.isRevoked(chain[0]) == true)
+		{
+        	System.out.println("\nCertificado revocado \n");
+		}
+		else
+		{
+			System.out.println("\nCertificado de usuario valido \n");
+		}
+      //Control verificacion de fecha de la CRL obtenida
+        Date FechaActual = new Date();
+        Date FechaActualizacionCRL = crl.getNextUpdate();    
+        //System.out.println("CRL valid until: " + FechaActualizacionCRL);
+        //System.out.println("Certificate revoked: " + crl.isRevoked(chain[0]));
+        if(FechaActualizacionCRL.compareTo(FechaActual) < 0)//menor a 0 fecha actualizacion es anterior a fecha actual
+        {
+        	System.out.println("\nError: Fecha de actualización de CRL anterior a la fecha actual \n");
+        }
+		else
+		{
+			System.out.println("\nFecha de actualización de CRL correcta\n");
+		}
+        
 		//Se indica el origen del pdf a firmar
         PdfReader reader = new PdfReader(origenrecibo);
         
         //Se indica el destino del pdf firmado
-        PdfStamper stamper = PdfStamper.createSignature(reader, new FileOutputStream(destinorecibo), '\0');
+        PdfStamper stamper = PdfStamper.createSignature(reader, new FileOutputStream(destinorecibo), '\0', null, true);
         
         //Se indican alguno detalles de la forma en que se firmara
         PdfSignatureAppearance appearance = stamper.getSignatureAppearance();
@@ -104,7 +150,7 @@ public class LogicaFirma
         ExternalDigest digest = new BouncyCastleDigest();
 
         //Se genera la firma y se almacena el pdf como se indico en las lineas anteriores
-        MakeSignature.signDetached(appearance, digest, es, chain, null, null, null,0, CryptoStandard.CMS);
+        MakeSignature.signDetached(appearance, digest, es, chain, crlList, null, null,0, CryptoStandard.CMS);
         
         //Se cierran las instancias para liberar espacio
         stamper.close();
