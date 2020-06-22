@@ -15,7 +15,7 @@
   <service name="ServicioFirma" provider="java:RPC" style="wrapped" use="literal">
       <parameter name="wsdlTargetNamespace" value="http://com"/>
       <parameter name="wsdlServiceElement" value="ServicioFirmaService"/>
-      <parameter name="schemaQualified" value="http://text.itextpdf.com,http://com"/>
+      <parameter name="schemaQualified" value="http://com,http://text.itextpdf.com"/>
       <parameter name="wsdlServicePort" value="ServicioFirma"/>
       <parameter name="className" value="com.ServicioFirmaSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="ServicioFirma"/>

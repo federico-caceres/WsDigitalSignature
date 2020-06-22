@@ -7,8 +7,8 @@
   <ns1:parameter name="dotNetSoapEncFix" value="true"/>
   <ns1:parameter name="enableNamespacePrefixOptimization" value="false"/>
   <ns1:parameter name="sendXMLDeclaration" value="true"/>
-  <ns1:parameter name="sendXsiTypes" value="true"/>
   <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+  <ns1:parameter name="sendXsiTypes" value="true"/>
   <ns1:requestFlow>
    <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
     <ns1:parameter name="scope" value="session"/>
@@ -20,8 +20,14 @@
   </ns1:requestFlow>
  </ns1:globalConfiguration>
  <ns1:handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
- <ns1:handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
  <ns1:handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder"/>
+ <ns1:handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
+ <ns1:service name="AdminService" provider="java:MSG">
+  <ns1:parameter name="allowedMethods" value="AdminService"/>
+  <ns1:parameter name="enableRemoteAdmin" value="false"/>
+  <ns1:parameter name="className" value="org.apache.axis.utils.Admin"/>
+  <ns1:namespace>http://xml.apache.org/axis/wsdd/</ns1:namespace>
+ </ns1:service>
  <ns1:service name="ServicioFirma" provider="java:RPC" style="wrapped" use="literal">
   <ns2:operation name="func" qname="ns1:func" returnQName="ns1:funcReturn" returnType="xsd:string" soapAction="" xmlns:ns1="http://com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://xml.apache.org/axis/wsdd/">
    <ns2:parameter qname="ns1:tipo_firma" type="xsd:int"/>
@@ -36,16 +42,10 @@
   <ns1:parameter name="wsdlPortType" value="ServicioFirma"/>
   <ns1:parameter name="className" value="com.ServicioFirma"/>
   <ns1:parameter name="wsdlServicePort" value="ServicioFirma"/>
-  <ns1:parameter name="schemaQualified" value="http://text.itextpdf.com,http://com"/>
+  <ns1:parameter name="schemaQualified" value="http://com,http://text.itextpdf.com"/>
   <ns1:parameter name="wsdlTargetNamespace" value="http://com"/>
   <ns1:parameter name="wsdlServiceElement" value="ServicioFirmaService"/>
   <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns3:DocumentException" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.itextpdf.text.DocumentException" xmlns:ns3="http://text.itextpdf.com"/>
- </ns1:service>
- <ns1:service name="AdminService" provider="java:MSG">
-  <ns1:parameter name="allowedMethods" value="AdminService"/>
-  <ns1:parameter name="enableRemoteAdmin" value="false"/>
-  <ns1:parameter name="className" value="org.apache.axis.utils.Admin"/>
-  <ns1:namespace>http://xml.apache.org/axis/wsdd/</ns1:namespace>
  </ns1:service>
  <ns1:service name="Version" provider="java:RPC">
   <ns1:parameter name="allowedMethods" value="getVersion"/>
