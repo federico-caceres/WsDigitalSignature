@@ -38,7 +38,6 @@ import com.itextpdf.text.pdf.security.PrivateKeySignature;
 import com.itextpdf.text.pdf.security.MakeSignature.CryptoStandard;
 import java.util.Date;
 
-@SuppressWarnings("unused")
 public class LogicaFirma 
 {
 	
@@ -100,12 +99,12 @@ public class LogicaFirma
     	}
         
         //Se obtiene las CRL del certificado raiz e intermedio y se agrega para agregar al documento firmado
-        /*List<CrlClient> crlList = new ArrayList<CrlClient>();
+        List<CrlClient> crlList = new ArrayList<CrlClient>();
         crlList.add(new CrlClientOnline(chain));
         
         //Control verificacion de revocacion del ceritificado
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
-        X509CRL crl = (X509CRL)cf.generateCRL(new FileInputStream("C:/xampp/htdocs/sgfrs/public/crl/vitsa.crl"));
+        X509CRL crl = (X509CRL)cf.generateCRL(new FileInputStream("C:/xampp/htdocs/sgfrs/public/crl/intermedia.crl"));
         if(crl.isRevoked(chain[0]) == true)
 		{
         	System.out.println("\nCertificado revocado \n");
@@ -126,7 +125,7 @@ public class LogicaFirma
 		else
 		{
 			System.out.println("\nFecha de actualización de CRL correcta\n");
-		}*/
+		}
         
 		//Se indica el origen del pdf a firmar
         PdfReader reader = new PdfReader(origenrecibo);
@@ -151,7 +150,7 @@ public class LogicaFirma
         ExternalDigest digest = new BouncyCastleDigest();
 
         //Se genera la firma y se almacena el pdf como se indico en las lineas anteriores
-        MakeSignature.signDetached(appearance, digest, es, chain,null/*crlList*/, null, null,0, CryptoStandard.CMS);
+        MakeSignature.signDetached(appearance, digest, es, chain,crlList, null, null,0, CryptoStandard.CMS);
         
         //Se cierran las instancias para liberar espacio
         stamper.close();
